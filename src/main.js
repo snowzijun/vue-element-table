@@ -1,40 +1,21 @@
-import Vue from 'vue'
+/*
+ * @Author: 子君
+ * @Date: 2020-07-21 12:29:49
+ * @LastEditors: 子君
+ * @LastEditTime: 2020-07-21 13:20:38
+ * @Description: 文件说明
+ * @FilePath: \vue-element-table\src\main.js
+ */
+// 扫描所有的组件
+import ZjTable from './components/zj-table'
 
-// 用于控制浏览器前进后退 使用keep-alive
-import Navigation from 'vue-navigation'
+const components = [ZjTable]
 
-import FastClick from 'fastclick'
-
-import App from './App.vue'
-import store from './store'
-import router from './router'
-
-// 安装基础组件 与自定义组件
-import BaseComponent from './base'
-import CustomComponent from './components'
-
-Vue.use(BaseComponent, {})
-Vue.use(CustomComponent, {})
-
-Vue.config.productionTip = false
-
-// 处理点击事件延迟300ms问题
-FastClick.attach(document.body)
-
-// 用于控制浏览器前进后退缓存
-Vue.use(Navigation, {
-  router,
-  store
-})
-
-// 开发环境下面使用vConsole进行调试
-if (process.env.NODE_ENV === 'development') {
-  const VConsole = require('vconsole')
-  new VConsole()
+export default {
+  install(Vue) {
+    components.forEach(component => {
+      Vue.component(component.name, component)
+    })
+  },
+  ZjTable
 }
-
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
