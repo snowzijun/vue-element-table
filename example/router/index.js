@@ -2,7 +2,7 @@
  * @Author: 子君
  * @Date: 2020-06-15 10:34:38
  * @LastEditors: 子君
- * @LastEditTime: 2020-07-22 12:47:33
+ * @LastEditTime: 2020-07-22 16:10:39
  * @Description: 文件说明
  * @FilePath: \vue-element-table\example\router\index.js
  */
@@ -36,6 +36,10 @@ const router = new VueRouter({
         {
           path: 'button',
           component: () => import('../views/demo/button')
+        },
+        {
+          path: 'row-edit',
+          component: () => import('../views/demo/row-edit')
         }
       ]
     }

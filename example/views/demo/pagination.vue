@@ -2,7 +2,7 @@
  * @Author: 子君
  * @Date: 2020-07-22 12:24:20
  * @LastEditors: 子君
- * @LastEditTime: 2020-07-22 12:42:32
+ * @LastEditTime: 2020-07-22 19:04:29
  * @Description: 使用分页
  * @FilePath: \vue-element-table\example\views\demo\pagination.vue
 -->
@@ -14,6 +14,7 @@
     :current-page.sync="currentPage"
     :page-size.sync="pageSize"
     :total="total"
+    height="auto"
     @page-change="$_handlePageChange"
   />
 </template>

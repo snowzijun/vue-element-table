@@ -16,7 +16,7 @@ import {
 } from 'element-ui'
 import { throttle } from 'lodash'
 import ZjSelect from './fields/select'
-import './index.less'
+import './index.scss'
 
 const tableProps = {
   defaultExpandAll: Table.props.defaultExpandAll,
@@ -92,7 +92,10 @@ export default {
       type: Boolean,
       default: false
     },
-
+    /**
+     * 默认表格的高度是充满父容器的
+     * 如果height 设置为 'auto',则表格高度将会根据内容自动撑起来
+     */
     height: {
       type: [Number, String],
       default: 0
@@ -302,7 +305,6 @@ export default {
             // 是否可点击
             link = false
           } = column
-          // 临时去掉排序
           let newSortable = sortable
           if (column.sortable !== undefined) {
             newSortable = column.sortable ? 'custom' : false
@@ -618,13 +620,16 @@ export default {
       // 事件改写
       const newEvents = getEvents(events)
       const newNativeEvents = getEvents(nativeEvents)
-
       return (
         <Component
+          size="small"
           on={newEvents}
           nativeOn={newNativeEvents}
           v-model={this.editRowsData[rowId][field.prop]}
-          props={field}
+          {...{
+            attrs: field,
+            props: field
+          }}
         />
       )
     },
@@ -967,6 +972,7 @@ export default {
       // 校验方法
       const validate = data => {
         return new Promise((resolve, reject) => {
+          console.log(data, 'vilidate')
           validator.validate(data, { firstField: true }, (errors, fields) => {
             if (errors) {
               reject(errors)
@@ -1036,6 +1042,7 @@ export default {
             success(id)
           })
           .catch(errors => {
+            console.error(errors, 1)
             errorFun(errors[0])
           })
       } else {
@@ -1049,6 +1056,7 @@ export default {
             success()
           })
           .catch(errors => {
+            console.error(errors, 2)
             errorFun(errors[0])
           })
       }
@@ -1060,7 +1068,10 @@ export default {
     const table = this._renderTable(h)
     const page = this._renderPage(h)
     return (
-      <div class="zj-table">
+      <div
+        class="zj-table"
+        style={{ height: this.tableHeight === 'auto' ? 'auto' : '100%' }}
+      >
         {toolbar}
         {table}
         {page}

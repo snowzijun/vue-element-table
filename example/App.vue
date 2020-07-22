@@ -2,7 +2,7 @@
  * @Author: 冯超
  * @Date: 2020-07-08 16:12:32
  * @LastEditors: 子君
- * @LastEditTime: 2020-07-21 13:33:56
+ * @LastEditTime: 2020-07-22 15:27:57
  * @Description: 文件说明
  * @FilePath: \vue-element-table\example\App.vue
 -->
@@ -15,7 +15,7 @@
 export default {}
 </script>
 
-<style lang="less">
+<style lang="scss">
 #app {
   height: 100vh;
   font-family: PingFangSC-Regular;
