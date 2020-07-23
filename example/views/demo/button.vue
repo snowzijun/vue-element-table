@@ -2,7 +2,7 @@
  * @Author: 子君
  * @Date: 2020-07-22 12:44:02
  * @LastEditors: 子君
- * @LastEditTime: 2020-07-22 13:33:17
+ * @LastEditTime: 2020-07-23 13:37:22
  * @Description: 使用按钮
  * @FilePath: \vue-element-table\example\views\demo\button.vue
 -->
@@ -110,6 +110,29 @@ export default {
           before: (/** rows */) => {
             return true
           }
+        },
+        {
+          id: 'dropdown',
+          text: '下拉按钮',
+          children: [
+            {
+              id: 'moveUp',
+              text: '上移',
+              icon: 'el-icon-arrow-up',
+              click: () => {
+                console.log('上移')
+              }
+            },
+            {
+              id: 'moveDown',
+              text: '下移',
+              icon: 'el-icon-arrow-down',
+              disabled: rows => !rows.length,
+              click: () => {
+                console.log('下移')
+              }
+            }
+          ]
         }
       ])
     }

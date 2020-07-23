@@ -23,6 +23,7 @@ const tableProps = {
   treeProps: Table.props.treeProps,
   expandRowKeys: Table.props.expandRowKeys
 }
+
 /* eslint-disable no-unused-vars */
 export default {
   name: 'ZjTable',
@@ -60,11 +61,6 @@ export default {
     pagination: {
       type: Boolean,
       default: true
-    },
-    // 分页类型
-    paginationSmall: {
-      type: Boolean,
-      default: false
     },
 
     // 每页条数
@@ -122,7 +118,11 @@ export default {
       // 行编辑开启的行索引集合
       editRowsKey: [],
       // 行编辑的编辑数据，key值为行索引
-      editRowsData: {}
+      editRowsData: {},
+      // 分页条的高度 TODO: 暂时写死，
+      paginationHeight: 52,
+      // 按钮区域的高度 TODO: 暂时写死
+      buttonHeight: 42
     }
   },
   computed: {
@@ -130,15 +130,45 @@ export default {
     tableListeners() {
       return { ...this.$listeners }
     },
-    // 计算表格高度
+    // 计算表格区域高度
     tableHeight() {
-      const { height, innerHeight } = this
+      const {
+        height,
+        innerHeight,
+        pagination,
+        buttons,
+        buttonHeight,
+        paginationHeight
+      } = this
       if (height) {
-        return height
-      } else if (innerHeight) {
+        let customHeight = height
+        if (typeof customHeight === 'string') {
+          if (customHeight.endsWith('px')) {
+            customHeight = parseFloat(customHeight)
+          }
+        }
+        if (typeof customHeight === 'number') {
+          return (
+            customHeight -
+            (pagination ? paginationHeight : 0) -
+            (buttons.length ? buttonHeight : 0)
+          )
+        }
+        return customHeight
+      } else {
         return innerHeight
       }
-      return 0
+    },
+    // 计算表格容器的高度
+    tableContainerHeight() {
+      const { height, tableHeight } = this
+      if (height) {
+        if (typeof height === 'number') {
+          return `${height}px`
+        }
+        return height
+      }
+      return '100%'
     }
   },
   mounted() {
@@ -163,6 +193,7 @@ export default {
     editRowsData: {
       handler(newValue) {
         const { rowKey } = this
+        // 如果编辑的数据发生变化，则对外暴露edit-change事件
         this.$emit(
           'edit-change',
           this.data.map(item => {
@@ -206,6 +237,7 @@ export default {
       if (tableHeight && tableHeight !== 'auto') {
         props['height'] = tableHeight
       }
+      console.log('tableHeight', tableHeight)
       const table = (
         <div class="zj-table__container">
           <Table
@@ -515,7 +547,6 @@ export default {
         beforeEdit = () => true,
         formatter,
         width
-        // minWidth = '120'
       } = column
       const rules = field.rules || []
       const columnScope = this.$scopedSlots.column
@@ -576,24 +607,22 @@ export default {
     },
     // 编辑单元格
     _renderEditCell(h, field) {
-      switch (field.componentType) {
-        case 'input':
-          return this._renderField(h, field, Input)
-        case 'select':
-          return this._renderField(h, field, ZjSelect)
-        case 'date':
-          return this._renderField(h, field, DatePicker)
-        case 'time':
-          return this._renderField(h, field, TimeSelect)
-        case 'number':
-          // 表格上面的数字框不显示控制按钮
-          field.controls = false
-          return this._renderField(h, field, InputNumber)
-        case 'custom':
-          return this._renderField(h, field, field.component)
-        default:
-          return this._renderField(h, field, Input)
+      const components = {
+        input: Input,
+        select: ZjSelect,
+        date: DatePicker,
+        time: TimeSelect,
+        number: InputNumber
       }
+      const componentType = field.componentType
+      const component = components[componentType]
+      if (component) {
+        return this._renderField(h, field, component)
+      } else if (componentType === 'custom') {
+        // 如果自定义，可以通过component指定组件
+        return this._renderField(h, field, field.component)
+      }
+      return this._renderField(h, field, Input)
     },
     _renderField(h, field, Component) {
       // 编辑行的id字段
@@ -684,6 +713,7 @@ export default {
 
       return newActions.map(btn => {
         const { click, text, children, useSlot, ...rest } = btn
+        const hasChildren = children && children.length
         if (useSlot) {
           if (!slot) {
             throw new Error('请添加插槽')
@@ -693,9 +723,14 @@ export default {
         const button = (
           <Button {...{ props: { ...rest, ...props } }} onClick={click}>
             {text}
+            {hasChildren ? (
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            ) : (
+              undefined
+            )}
           </Button>
         )
-        if (children && children.length) {
+        if (hasChildren) {
           const events = {}
           // 处理下拉事件
           const dropdownClick = command => {
@@ -745,12 +780,11 @@ export default {
     },
     // 渲染分页
     _renderPage(h) {
-      const { pagination, paginationSmall, pageSize, total, currentPage } = this
+      const { pagination, pageSize, total, currentPage } = this
       return pagination ? (
         <div class="zj-table__page">
           <Pagination
             background
-            small={paginationSmall}
             total={total}
             currentPage={currentPage}
             pageSize={pageSize}
@@ -1067,11 +1101,9 @@ export default {
     const toolbar = this._renderToolbar(h)
     const table = this._renderTable(h)
     const page = this._renderPage(h)
+
     return (
-      <div
-        class="zj-table"
-        style={{ height: this.tableHeight === 'auto' ? 'auto' : '100%' }}
-      >
+      <div class="zj-table" style={{ height: this.tableContainerHeight }}>
         {toolbar}
         {table}
         {page}
