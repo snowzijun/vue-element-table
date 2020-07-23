@@ -40,7 +40,7 @@ export default {
      *  {
      *    label: '名称',
      *    prop: '字段属性',
-     *    // 嵌套属性
+     *    // 表头嵌套
      *    nests: [],
      *    editable: 是否可编辑,
      *    field: {}// 编辑的字段属性,
@@ -62,7 +62,6 @@ export default {
       type: Boolean,
       default: true
     },
-
     // 每页条数
     pageSize: {
       type: Number,
@@ -126,10 +125,6 @@ export default {
     }
   },
   computed: {
-    // 继承监听
-    tableListeners() {
-      return { ...this.$listeners }
-    },
     // 计算表格区域高度
     tableHeight() {
       const {
@@ -186,7 +181,7 @@ export default {
     'data.length': {
       handler(n, o) {
         if (n === 0 && o > 0 && this.currentPage > 1) {
-          this._handlePageCurrentChange(this.currentPage - 1)
+          this.$_handlePageCurrentChange(this.currentPage - 1)
         }
       }
     },
@@ -221,7 +216,7 @@ export default {
       })
     },
     // 渲染表格
-    _renderTable(h) {
+    $_renderTable(h) {
       const { data, tableHeight, rowKey } = this
       const originTableProps = Object.keys(tableProps).reduce(
         (result, item) => {
@@ -247,15 +242,12 @@ export default {
             border
             {...{
               on: {
-                ...this.tableListeners,
-                'selection-change': this._handleTableSelectionChange,
-                'current-change': this._handleTableCurrentChange,
-                'sort-change': this._handleSortChange,
-                'row-click': this._handleRowClick,
-                select: this._handleSelect,
-                'row-dblclick': (...rest) => {
-                  this.$emit('row-dblclick', ...rest)
-                }
+                ...this.$listeners,
+                'selection-change': this.$_handleTableSelectionChange,
+                'current-change': this.$_handleTableCurrentChange,
+                'sort-change': this.$_handleSortChange,
+                'row-click': this.$_handleRowClick,
+                select: this.$_handleSelect
               },
               props: {
                 ...props
@@ -264,21 +256,21 @@ export default {
             class="zj-table__body"
             ref="table"
           >
-            {this._renderAllColumns(h)}
+            {this.$_renderAllColumns(h)}
           </Table>
         </div>
       )
       return table
     },
     // 获取checkbox 列
-    _getSelectionColumn(h) {
+    $_getSelectionColumn(h) {
       const { selectable } = this
       return selectable
         ? [<TableColumn type="selection" width="40" fixed="left" />]
         : []
     },
     // 获取序号列
-    _getSequenceColumn(h) {
+    $_getSequenceColumn(h) {
       const { sequence } = this
       if (sequence) {
         return [
@@ -295,20 +287,20 @@ export default {
       return []
     },
     // 渲染所有的表格列，包括序号列和复选框列
-    _renderAllColumns(h) {
+    $_renderAllColumns(h) {
       const { columns } = this
 
       const colNodes = [
-        ...this._getSelectionColumn(h),
-        ...this._getSequenceColumn(h)
+        ...this.$_getSelectionColumn(h),
+        ...this.$_getSequenceColumn(h)
       ]
 
-      colNodes.push(...this._renderColumns(h, columns))
+      colNodes.push(...this.$_renderColumns(h, columns))
 
       return colNodes
     },
     // 渲染表格列
-    _renderColumns(h, columns) {
+    $_renderColumns(h, columns) {
       // 整体是否排序
       let sortable = this.sortable ? 'custom' : false
       return columns
@@ -347,37 +339,37 @@ export default {
           }
           if (nests && nests.length) {
             // 使用嵌套列
-            return this._renderNestColumn(h, column)
+            return this.$_renderNestColumn(h, column)
           } else if (editable) {
             // 使用编辑列
-            return this._renderEditColumn(h, column)
+            return this.$_renderEditColumn(h, column)
           } else if (useSlot) {
             // 使用插槽列
-            return this._renderSlotColumn(h, column)
+            return this.$_renderSlotColumn(h, column)
           } else if (actions && actions.length > 0) {
             // 使用操作列
             column.sortable = false
-            return this._renderActionColumn(h, column)
+            return this.$_renderActionColumn(h, column)
           } else if (link) {
             // 使用链接列
-            return this._renderLinkColumn(h, column)
+            return this.$_renderLinkColumn(h, column)
           } else {
             // 使用默认列
-            return this._renderDefaultColumn(h, column)
+            return this.$_renderDefaultColumn(h, column)
           }
         })
     },
     // 渲染嵌套列
-    _renderNestColumn(h, column) {
+    $_renderNestColumn(h, column) {
       const { label, nests } = column
       return (
         <TableColumn label={label} headerAlign="center">
-          {this._renderColumns(h, nests)}
+          {this.$_renderColumns(h, nests)}
         </TableColumn>
       )
     },
     // 渲染链接列
-    _renderLinkColumn(h, column) {
+    $_renderLinkColumn(h, column) {
       const { events = {}, prop, ...rest } = column
       return (
         <TableColumn
@@ -422,7 +414,7 @@ export default {
       )
     },
     // 渲染默认列
-    _renderDefaultColumn(h, column) {
+    $_renderDefaultColumn(h, column) {
       const { events = {}, minWidth = '100', ...rest } = column
       return (
         <TableColumn
@@ -438,7 +430,7 @@ export default {
       )
     },
     // 渲染操作列
-    _renderActionColumn(h, column) {
+    $_renderActionColumn(h, column) {
       const {
         label,
         // 如果存在操作按钮，则actions为非空数组
@@ -461,7 +453,7 @@ export default {
           {...{
             scopedSlots: {
               default: ({ row, column, $index }) => {
-                return this._renderButtons(
+                return this.$_renderButtons(
                   h,
                   actions,
                   {
@@ -481,7 +473,7 @@ export default {
     },
 
     // 渲染插槽列
-    _renderSlotColumn(h, column) {
+    $_renderSlotColumn(h, column) {
       const {
         prop,
         label,
@@ -535,7 +527,7 @@ export default {
       )
     },
     // 渲染编辑列
-    _renderEditColumn(h, column) {
+    $_renderEditColumn(h, column) {
       const { rowKey } = this
       const {
         prop,
@@ -590,7 +582,7 @@ export default {
                     return scope.row[prop]
                   }
                 } else {
-                  return this._renderEditCell(h, {
+                  return this.$_renderEditCell(h, {
                     ...field,
                     prop,
                     rowId: scope.row[rowKey]
@@ -606,7 +598,7 @@ export default {
       )
     },
     // 编辑单元格
-    _renderEditCell(h, field) {
+    $_renderEditCell(h, field) {
       const components = {
         input: Input,
         select: ZjSelect,
@@ -617,14 +609,14 @@ export default {
       const componentType = field.componentType
       const component = components[componentType]
       if (component) {
-        return this._renderField(h, field, component)
+        return this.$_renderField(h, field, component)
       } else if (componentType === 'custom') {
         // 如果自定义，可以通过component指定组件
-        return this._renderField(h, field, field.component)
+        return this.$_renderField(h, field, field.component)
       }
-      return this._renderField(h, field, Input)
+      return this.$_renderField(h, field, Input)
     },
-    _renderField(h, field, Component) {
+    $_renderField(h, field, Component) {
       // 编辑行的id字段
       const { rowId, events = {}, nativeEvents = {} } = field
 
@@ -663,15 +655,19 @@ export default {
       )
     },
     // 渲染工具条按钮区域
-    _renderToolbarButtons(h) {
+    $_renderToolbarButtons(h) {
       const { buttons, selectable } = this
       // 工具条按钮
       let toolbarBtns = null
       if (buttons.length > 0) {
         const buttonScope = this.$scopedSlots.button
-        return this._renderButtons(h, buttons, { size: 'small' }, buttonScope, [
-          selectable ? this.selectRows : this.currentRow
-        ])
+        return this.$_renderButtons(
+          h,
+          buttons,
+          { size: 'small' },
+          buttonScope,
+          [selectable ? this.selectRows : this.currentRow]
+        )
       }
       return toolbarBtns
     },
@@ -708,7 +704,7 @@ export default {
      * @param {*} h
      */
     // eslint-disable-next-line max-params
-    _renderButtons(h, buttons, props, slot, args) {
+    $_renderButtons(h, buttons, props, slot, args) {
       const newActions = this._preActionButtons(buttons, ...args)
 
       return newActions.map(btn => {
@@ -762,8 +758,8 @@ export default {
     },
 
     // 渲染工具栏
-    _renderToolbar(h) {
-      const buttons = this._renderToolbarButtons(h)
+    $_renderToolbar(h) {
+      const buttons = this.$_renderToolbarButtons(h)
       const toolbarSlot = this.$slots.toolbar
       if (buttons || toolbarSlot) {
         return (
@@ -779,7 +775,7 @@ export default {
       return null
     },
     // 渲染分页
-    _renderPage(h) {
+    $_renderPage(h) {
       const { pagination, pageSize, total, currentPage } = this
       return pagination ? (
         <div class="zj-table__page">
@@ -791,8 +787,8 @@ export default {
             layout="total,sizes,prev,pager,next,jumper"
             {...{
               on: {
-                'size-change': this._handlePageSizeChange,
-                'current-change': this._handlePageCurrentChange
+                'size-change': this.$_handlePageSizeChange,
+                'current-change': this.$_handlePageCurrentChange
               }
             }}
           />
@@ -800,11 +796,10 @@ export default {
       ) : null
     },
     // 表格每页条数发生变化触发
-    _handlePageSizeChange(pageSize) {
+    $_handlePageSizeChange(pageSize) {
       const { total, currentPage } = this
       this.$emit('update:pageSize', pageSize)
       // 如果总页码小于当前页码，则当前页码会变化，触发handleCurrentChange
-
       if (Math.ceil(total / pageSize) >= currentPage) {
         this.$emit('page-change', {
           pageSize
@@ -812,35 +807,35 @@ export default {
       }
     },
     // 表格页码发生变化触发
-    _handlePageCurrentChange(currentPage) {
+    $_handlePageCurrentChange(currentPage) {
       this.$emit('update:currentPage', currentPage)
       this.$emit('page-change', {
         currentPage
       })
     },
     // 当选择项发生变化时会触发该事件
-    _handleTableSelectionChange(selection) {
+    $_handleTableSelectionChange(selection) {
       this.selectRows = selection
       this.$emit('selection-change', selection)
     },
-    _handleSelect(selection, row) {
+    $_handleSelect(selection, row) {
       this.setCurrentRow(row)
       this.$emit('select', selection, row)
     },
-    _handleRowClick(row, column, event) {
+    $_handleRowClick(row, column, event) {
       // 行点击时 只能选中一行
       this.$refs.table.clearSelection()
       this.toggleRowSelection(row, true)
       this.$emit('row-click', row, column, event)
     },
     // 表格的当前行发生变化的时候会触发该事件
-    _handleTableCurrentChange(newRow, oldRow) {
+    $_handleTableCurrentChange(newRow, oldRow) {
       this.currentRow = newRow
 
       this.$emit('current-change', newRow, oldRow)
     },
     // 排序
-    _handleSortChange({ prop, order }) {
+    $_handleSortChange({ prop, order }) {
       if (order) {
         this.$emit('sort-change', {
           propName: prop,
@@ -1098,9 +1093,9 @@ export default {
   },
 
   render(h) {
-    const toolbar = this._renderToolbar(h)
-    const table = this._renderTable(h)
-    const page = this._renderPage(h)
+    const toolbar = this.$_renderToolbar(h)
+    const table = this.$_renderTable(h)
+    const page = this.$_renderPage(h)
 
     return (
       <div class="zj-table" style={{ height: this.tableContainerHeight }}>
