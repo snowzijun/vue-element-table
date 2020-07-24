@@ -277,9 +277,10 @@ export default {
           <TableColumn
             resizable={false}
             label="序号"
-            width="60"
+            width="50"
             type="index"
             fixed="left"
+            align="center"
             index={index => index + 1}
           />
         ]

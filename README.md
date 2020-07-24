@@ -7,11 +7,103 @@
 ### 功能介绍
 
 #### 分页
+`element-ui`虽然提供了分页组件，但是分页组件并没有与表格做成一个组件，本组件对两者进行了组合，使用方式如下所示:
+```html
+<zj-table
+    :current-page.sync="currentPage"
+    :page-size.sync="pageSize"
+    :total="total"
+    @page-change="$_handlePageChange"
+  />
+```
+```javascript
+export default {
+  data() {
+    return {
+      // 当前页码
+      currentPage: 1,
+      // 每页条数
+      pageSize: 10,
+      // 总条数
+      total: 0
+    }
+  },
+  methods:{
+    // 当切换每页条数或页码的时候触发
+    $_handlePageChange() {
+      this.loadData()
+    }
+  }
+}
+```
+完整代码见 example
+
 #### 顶部按钮
+在使用表格的时候，经常需要给表格顶部添加一些操作按钮，比如`新增`,`删除`,`启用`,`禁用`等等按钮。所以将这些按钮封装起来，用起来会更方便一下，如下为使用方式:
+```html
+<zj-table
+    :buttons="buttons"
+  />
+```
+```javascript
+  // 按钮一般定义好不会修改，U所以用Object.freeze节省性能
+   buttons: Object.freeze([
+        {
+          // id 必须有而且是在当前按钮数组里面是唯一的
+          id: 'add',
+          text: '新增',
+          type: 'primary',
+          icon: 'el-icon-circle-plus',
+          click: this.$_handleAdd
+        },
+        {
+          id: 'delete',
+          text: '删除',
+          // rows 是表格选中的行，如果没有选中行，则禁用删除按钮, disabled可以是一个boolean值或者函数
+          disabled: rows => !rows.length,
+          click: this.$_handleRemove
+        },
+        {
+          id: 'auth',
+          text: '这个按钮根据权限显示',
+          // 可以通过返回 true/false来控制按钮是否显示
+          before: (/** rows */) => {
+            return true
+          }
+        },
+        {
+          id: 'dropdown',
+          text: '下拉按钮',
+          children: [
+            {
+              id: 'moveUp',
+              text: '上移',
+              icon: 'el-icon-arrow-up',
+              click: () => {
+                console.log('上移')
+              }
+            },
+            {
+              id: 'moveDown',
+              text: '下移',
+              icon: 'el-icon-arrow-down',
+              disabled: rows => !rows.length,
+              click: () => {
+                console.log('下移')
+              }
+            }
+          ]
+        }
+      ])
+```
+
 #### 行操作按钮
+除了表格顶部的按钮之外，经常需要给表格最后一行添加操作按钮，比如`编辑`,`下载`,`删除`等等按钮，如何配置呢?
+
 #### 自带复选框
 #### 自带行序号
 #### 行编辑
+#### 自适应高度
 
 ### API
 
