@@ -1,15 +1,15 @@
 {
-  "name": "vue-vant-base",
+  "name": "vue-element-table",
   "version": "0.1.0",
   "private": true,
-  "description": "这个项目是将一些基础配置比如eslint,移动端适配等进行了封装，开发人员只需fork就可直接开箱即用，不用再做额外的配置",
+  "description": "基于element-ui表格二次包装的表格，可以使用JSON完成表格配置",
   "author": {
     "name": "子君",
     "email": "1451965647@qq.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/snowzijun/vue-vant-base"
+    "url": "https://github.com/snowzijun/vue-element-table"
   },
   "license": "MIT",
   "engines": {
@@ -17,9 +17,9 @@
   },
   "keywords": [
     "Vue",
-    "Vant",
-    "开箱即用",
-    "前端框架"
+    "element-ui",
+    "表格",
+    "JSON配置"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -74,6 +74,10 @@
     "stylelint-prettier": "^1.1.2",
     "stylelint-scss": "^3.17.2",
     "vue-template-compiler": "^2.6.11"
+  },
+  "peerDependencies":{
+    "async-validator": "^3.3.0",
+    "lodash": "^4.17.19"
   },
   "husky": {
     "hooks": {

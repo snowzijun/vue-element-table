@@ -1,8 +1,8 @@
 /*
  * @Author: 子君
  * @Date: 2020-07-12 12:26:05
- * @LastEditTime: 2020-07-22 13:50:33
- * @LastEditors: 子君
+ * @LastEditTime: 2020-07-26 20:42:44
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \vue-element-table\vue.config.js
  */
@@ -32,10 +32,17 @@ module.exports = {
       return args
     })
 
-    config
-      .entry('app')
-      .clear()
-      .add('./example/main.js')
+    if (process.env.NODE_ENV === 'production') {
+      config.externals({
+        'element-ui': 'element-ui',
+        'async-validator': 'async-validator'
+      })
+    } else {
+      config
+        .entry('app')
+        .clear()
+        .add('./example/main.js')
+    }
   },
   // 不需要生产环境的 source map
   productionSourceMap: false,
