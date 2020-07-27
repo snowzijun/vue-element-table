@@ -56,6 +56,9 @@ npm run serve
 npm run lint
 ```
 
+### 使用说明
+点击访问 [https://juejin.im/post/5f1d92cb5188252e884e986f](https://juejin.im/post/5f1d92cb5188252e884e986f)，即可查看使用说明
+
 ### API
 
 #### 表格属性
