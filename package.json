@@ -1,6 +1,6 @@
 {
   "name": "vue-elementui-table",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "基于element-ui表格二次包装的表格，可以使用JSON完成表格配置",
   "main": "lib/vue-element-table.umd.min.js",
