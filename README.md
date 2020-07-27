@@ -27,13 +27,30 @@
 
 ### 常用命令
 
-1. 查看示例
+1. 安装
+```
+npm install vue-elementui-table -S
+```
 
+2. 在项目中使用
+
+在`main.js`中添加以下代码
+
+```javascript
+
+import ZjTable from 'vue-element-table'
+Vue.use(ZjTable)
+
+```
+
+3. 查看官方示例
+
+下载github源码，然后执行下面命令即可查看示例
 ```shell
 npm run serve
 ```
 
-2. 代码格式化
+4. 代码格式化
 
 ```shell
 npm run lint
