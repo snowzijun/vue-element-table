@@ -716,7 +716,10 @@ export default {
           if (!slot) {
             throw new Error('请添加插槽')
           }
-          return slot(btn, ...args)
+          return slot({
+            ...btn,
+            $data: args
+          })
         }
         const button = (
           <Button
