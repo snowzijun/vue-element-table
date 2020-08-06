@@ -710,7 +710,7 @@ export default {
       const newActions = this._preActionButtons(buttons, ...args)
 
       return newActions.map(btn => {
-        const { click, text, children, useSlot, ...rest } = btn
+        const { click, text, children, useSlot, directives = [], ...rest } = btn
         const hasChildren = children && children.length
         if (useSlot) {
           if (!slot) {
@@ -719,7 +719,10 @@ export default {
           return slot(btn, ...args)
         }
         const button = (
-          <Button {...{ props: { ...rest, ...props } }} onClick={click}>
+          <Button
+            {...{ props: { directives, ...rest, ...props } }}
+            onClick={click}
+          >
             {text}
             {hasChildren ? (
               <i class="el-icon-arrow-down el-icon--right"></i>
