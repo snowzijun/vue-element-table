@@ -1,22 +1,12 @@
-<!--
- * @Author: 子君
- * @Date: 2020-07-21 12:41:42
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-07-26 21:23:50
- * @Description: 文件说明
- * @FilePath: \vue-element-table\example\views\demo\base.vue
--->
 <template>
-  <zj-table
-    :columns="columns"
-    :data="data"
-    :pagination="false"
-    :selectable="selectable"
-    :sequence="sequence"
-  />
+  <div style="height: 500px;">
+    <zj-table :columns="columns" :data="data" :pagination="false" />
+  </div>
 </template>
+
 <script>
 export default {
+  components: {},
   data() {
     return {
       columns: Object.freeze([
@@ -52,3 +42,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.app-container {
+  height: 100%;
+}
+</style>

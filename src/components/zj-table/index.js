@@ -442,6 +442,7 @@ export default {
         align = 'center',
         width = 120
       } = column
+      const buttonScope = this.$scopedSlots.action
       return (
         <TableColumn
           resizable={false}
@@ -460,7 +461,7 @@ export default {
                   {
                     type: 'text'
                   },
-                  null,
+                  buttonScope,
                   [row, column, $index]
                 )
               }
