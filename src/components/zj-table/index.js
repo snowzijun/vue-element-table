@@ -462,7 +462,13 @@ export default {
                     type: 'text'
                   },
                   buttonScope,
-                  [row, column, $index]
+                  [row, column, $index],
+                  // 插槽的参数
+                  {
+                    row,
+                    column,
+                    $index
+                  }
                 )
               }
             },
@@ -668,7 +674,10 @@ export default {
           buttons,
           { size: 'small' },
           buttonScope,
-          [selectable ? this.selectRows : this.currentRow]
+          [selectable ? this.selectRows : this.currentRow],
+          {
+            rows: selectable ? this.selectRows : this.currentRow
+          }
         )
       }
       return toolbarBtns
@@ -706,7 +715,7 @@ export default {
      * @param {*} h
      */
     // eslint-disable-next-line max-params
-    $_renderButtons(h, buttons, props, slot, args) {
+    $_renderButtons(h, buttons, props, slot, args, slotArgs) {
       const newActions = this._preActionButtons(buttons, ...args)
 
       return newActions.map(btn => {
@@ -718,7 +727,7 @@ export default {
           }
           return slot({
             ...btn,
-            $data: args
+            ...slotArgs
           })
         }
         const button = (
