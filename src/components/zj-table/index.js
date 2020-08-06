@@ -668,6 +668,7 @@ export default {
       // 工具条按钮
       let toolbarBtns = null
       if (buttons.length > 0) {
+        console.log(buttons)
         const buttonScope = this.$scopedSlots.button
         return this.$_renderButtons(
           h,
@@ -732,7 +733,7 @@ export default {
         }
         const button = (
           <Button
-            {...{ props: { directives, ...rest, ...props } }}
+            {...{ props: { ...rest, ...props }, directives }}
             onClick={click}
           >
             {text}

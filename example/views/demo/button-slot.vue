@@ -2,7 +2,7 @@
  * @Author: 子君
  * @Date: 2020-07-22 12:44:02
  * @LastEditors: 子君
- * @LastEditTime: 2020-08-06 16:03:51
+ * @LastEditTime: 2020-08-06 16:29:20
  * @Description: 使用按钮
  * @FilePath: \vue-element-table\example\views\demo\button-slot.vue
 -->
@@ -25,8 +25,8 @@
       </template>
     </template>
 
-    <template #action="{id}">
-      <template v-if="id === 'slot'">
+    <template #action="scope">
+      <template v-if="scope.id === 'slot'">
         <el-button type="text">
           自定义操作按钮
         </el-button>
