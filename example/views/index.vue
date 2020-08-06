@@ -2,7 +2,7 @@
  * @Author: 子君
  * @Date: 2020-07-21 13:28:35
  * @LastEditors: 子君
- * @LastEditTime: 2020-07-22 13:26:19
+ * @LastEditTime: 2020-08-06 12:36:13
  * @Description: 文件说明
  * @FilePath: \vue-element-table\example\views\index.vue
 -->
@@ -25,6 +25,10 @@
         <el-menu-item index="/demo/button">
           <i class="el-icon-document"></i>
           <span slot="title">表格按钮</span>
+        </el-menu-item>
+        <el-menu-item index="/demo/slot-button">
+          <i class="el-icon-document"></i>
+          <span slot="title">按钮插槽</span>
         </el-menu-item>
         <el-menu-item index="/demo/row-edit">
           <i class="el-icon-setting"></i>
