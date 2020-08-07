@@ -309,12 +309,12 @@ export default {
           const { hidden } = column
           if (hidden !== undefined) {
             if (typeof hidden === 'function') {
-              return hidden({
+              return !hidden({
                 columns,
                 column
               })
             }
-            return hidden
+            return !hidden
           }
           return true
         })
