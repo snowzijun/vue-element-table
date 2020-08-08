@@ -492,9 +492,7 @@ export default {
         useSlot,
         ...rest
       } = column
-      const columnSlotName =
-        typeof useSlot === 'boolean' ? 'column' : `column-${useSlot}`
-      const columnScope = this.$scopedSlots[columnSlotName]
+      const columnScope = this.$scopedSlots.column
       const headerScope = this.$scopedSlots.header
       return (
         <TableColumn
