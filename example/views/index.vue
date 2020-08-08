@@ -34,6 +34,10 @@
           <i class="el-icon-setting"></i>
           <span slot="title">表格行编辑</span>
         </el-menu-item>
+        <el-menu-item index="/demo/column-slot">
+          <i class="el-icon-setting"></i>
+          <span slot="title">表格行插槽</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-main>
