@@ -309,12 +309,12 @@ export default {
           const { hidden } = column
           if (hidden !== undefined) {
             if (typeof hidden === 'function') {
-              return hidden({
+              return !hidden({
                 columns,
                 column
               })
             }
-            return hidden
+            return !hidden
           }
           return true
         })
@@ -489,9 +489,12 @@ export default {
         events = {},
         align = 'left',
         field,
+        useSlot,
         ...rest
       } = column
-      const columnScope = this.$scopedSlots.column
+      const columnSlotName =
+        typeof useSlot === 'boolean' ? 'column' : `column-${useSlot}`
+      const columnScope = this.$scopedSlots[columnSlotName]
       const headerScope = this.$scopedSlots.header
       return (
         <TableColumn
@@ -549,7 +552,9 @@ export default {
         width
       } = column
       const rules = field.rules || []
-      const columnScope = this.$scopedSlots.column
+      const columnSlotName =
+        typeof useSlot === 'boolean' ? 'column' : `column-${useSlot}`
+      const columnScope = this.$scopedSlots[columnSlotName]
       // 判断列是否必填，如果必填，需要添加必填样式
       const isRequired = rules.some(rule => rule.required)
 
