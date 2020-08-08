@@ -1,26 +1,28 @@
 <!--
  * @Author: vkboo
- * @LastEditTime: 2020-08-08 14:32
- * @LastEditors: vkboo
+ * @LastEditTime: 2020-08-08 22:50:52
+ * @LastEditors: Please set LastEditors
  * @LastEditTime: 2020-08-08 14:32
  * @Description: 表格行插槽
  * @FilePath: \vue-element-table\example\views\demo\column-slot.vue
 -->
 <template>
   <zj-table ref="table" :columns="columns" :data="data" :pagination="false">
-    <template #column-age="scope">
-      <span>{{ scope.cellValue }} 岁</span>
-    </template>
-    <template #column-sex="scope">
-      <span v-if="scope.cellValue === '1'" :style="{ color: '#00b1f7' }">
-        男♂
-      </span>
-      <span v-else-if="scope.cellValue === '0'" :style="{ color: '#e90286' }">
-        女♀
-      </span>
-    </template>
     <template #column="scope">
-      <el-tag>{{ scope.cellValue }}</el-tag>
+      <template v-if="scope.prop === 'age'">
+        <span>{{ scope.cellValue }} 岁</span>
+      </template>
+      <template v-if="scope.prop === 'sex'">
+        <span v-if="scope.cellValue === '1'" :style="{ color: '#00b1f7' }">
+          男♂
+        </span>
+        <span v-else-if="scope.cellValue === '0'" :style="{ color: '#e90286' }">
+          女♀
+        </span>
+      </template>
+      <el-tag v-if="scope.prop === 'grade'">
+        {{ scope.cellValue }}
+      </el-tag>
     </template>
   </zj-table>
 </template>
@@ -37,12 +39,12 @@ export default {
           label: '性别',
           prop: 'sex',
           // 格式化表格,与element-ui 的表格属性相同
-          useSlot: 'sex'
+          useSlot: true
         },
         {
           label: '年龄',
           prop: 'age',
-          useSlot: 'age'
+          useSlot: true
         },
         {
           label: '年级',
