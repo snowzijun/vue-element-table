@@ -44,6 +44,10 @@ const router = new VueRouter({
         {
           path: 'slot-button',
           component: () => import('../views/demo/button-slot')
+        },
+        {
+          path: 'column-slot',
+          component: () => import('../views/demo/column-slot')
         }
       ]
     }
