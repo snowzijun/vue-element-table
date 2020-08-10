@@ -49,7 +49,6 @@ export default {
         {
           label: '年级',
           prop: 'grade',
-          // 以Boolean值给slot赋值，则插槽默认是`column`
           useSlot: true
         }
       ]),

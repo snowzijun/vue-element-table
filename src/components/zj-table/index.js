@@ -489,7 +489,6 @@ export default {
         events = {},
         align = 'left',
         field,
-        useSlot,
         ...rest
       } = column
       const columnScope = this.$scopedSlots.column
@@ -550,9 +549,7 @@ export default {
         width
       } = column
       const rules = field.rules || []
-      const columnSlotName =
-        typeof useSlot === 'boolean' ? 'column' : `column-${useSlot}`
-      const columnScope = this.$scopedSlots[columnSlotName]
+      const columnScope = this.$scopedSlots.column
       // 判断列是否必填，如果必填，需要添加必填样式
       const isRequired = rules.some(rule => rule.required)
 
